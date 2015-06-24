@@ -15,6 +15,7 @@
  */
 package org.springframework.data.mongodb.repository.query;
 
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Range;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Point;
@@ -120,9 +121,15 @@ public class MongoParametersParameterAccessor extends ParametersParameterAccesso
 			return ((TextCriteria) fullText);
 		}
 
-		throw new IllegalArgumentException(
-				String.format("Expected full text parameter to be one of String, Term or TextCriteria but found %s.",
-						ClassUtils.getShortName(fullText.getClass())));
+		throw new IllegalArgumentException(String.format(
+				"Expected full text parameter to be one of String, Term or TextCriteria but found %s.",
+				ClassUtils.getShortName(fullText.getClass())));
+	}
+
+	public Example<?> getSampleObject() {
+
+		int index = method.getParameters().getSampleObjectParameterIndex();
+		return index >= 0 ? (Example<?>) getValue(index) : null;
 	}
 
 	/* 
