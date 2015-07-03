@@ -404,6 +404,22 @@ public class MongoExampleMapperUnitTests {
 						.add("custom_field_name", "steelheart").get()));
 	}
 
+	/**
+	 * @see DATAMONGO-1245
+	 */
+	@Test
+	public void mappingShouldIncludePropertiesFromHierarchicalDocument() {
+
+		HierachicalDocument probe = new HierachicalDocument();
+		probe.stringValue = "firefight";
+		probe.customNamedField = "steelheart";
+		probe.anotherStringValue = "calamity";
+
+		DBObject dbo = mapper.getMappedExample(exampleOf(probe), context.getPersistentEntity(FlatDocument.class));
+
+		assertThat(dbo, isBsonObject().containing("anotherStringValue", "calamity"));
+	}
+
 	static class FlatDocument {
 
 		@Id String id;
